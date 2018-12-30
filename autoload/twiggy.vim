@@ -637,11 +637,11 @@ function! s:RenderOutputBuffer() abort
   if empty(s:last_output)
     return
   endif
-  if !bufexists('TwiggyOutput') && bufwinnr('TwiggyOutput') > 0
-      silent keepalt botright new TwiggyOutput
+  if !bufexists('__Twiggy_Output_Buffer__') && bufwinnr('__Twiggy_Output_Buffer__') > 0
+      silent keepalt botright new __Twiggy_Output_Buffer__
   else
       " do not create duplicate windows
-      let winid = bufwinnr('TwiggyOutput')
+      let winid = bufwinnr('__Twiggy_Output_Buffer__')
       exe winid . 'wincmd w'
   endif
   let output = s:last_output
@@ -653,15 +653,9 @@ function! s:RenderOutputBuffer() abort
   call append(0, output)
   normal! "_ddgg
 
-  setlocal nomodified nomodifiable noswapfile nowrap nonumber
-  setlocal buftype=nofile bufhidden=delete
+  setlocal nomodified nomodifiable noswapfile nowrap nonumber winfixheight
+  setlocal buftype=nofile bufhidden=delete ft=TwiggyOutput
   let s:last_output = []
-
-  syntax clear
-  syntax match TwiggyOutputText "\v^[^ ](.*)"
-  highlight link TwiggyOutputText  Comment
-  syntax match TwiggyOutputFile "\v^\t(.*)"
-  highlight link TwiggyOutputFile Constant
 
   nnoremap <buffer> q :quit<CR>
   nnoremap <buffer> Q :quit<CR>:call <SID>Close()<CR>
@@ -782,7 +776,7 @@ function! s:Render() abort
       exec 'silent keepalt' g:twiggy_split_position g:twiggy_num_columns . 'vsplit' fname
     endif
     setlocal filetype=twiggy buftype=nofile bufhidden=delete
-    setlocal nonumber nowrap lisp
+    setlocal nonumber nowrap lisp winfixwidth
     let t:twiggy_bufnr = bufnr('')
   endif
 
