@@ -637,7 +637,7 @@ function! s:RenderOutputBuffer() abort
   if empty(s:last_output)
     return
   endif
-  if !bufexists('TwiggyOutput')
+  if !bufexists('TwiggyOutput') && bufwinnr('TwiggyOutput') > 0
       silent keepalt botright new TwiggyOutput
   else
       " do not create duplicate windows
