@@ -642,10 +642,10 @@ function! s:RenderOutputBuffer() abort
   let height = len(output)
   if height < 5 | let height = 5 | endif
   exec 'resize ' . height
-  normal! ggdG
+  normal! gg"_dG
   setlocal modifiable
   call append(0, output)
-  normal! ddgg
+  normal! "_ddgg
 
   setlocal nomodified nomodifiable noswapfile nowrap nonumber
   setlocal buftype=nofile bufhidden=delete
