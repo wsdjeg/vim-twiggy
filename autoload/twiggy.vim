@@ -637,7 +637,13 @@ function! s:RenderOutputBuffer() abort
   if empty(s:last_output)
     return
   endif
-  silent keepalt botright new TwiggyOutput
+  if !bufexists('TwiggyOutput')
+      silent keepalt botright new TwiggyOutput
+  else
+      " do not create duplicate windows
+      let winid = bufwinnr('TwiggyOutput')
+      exe winid . 'wincmd w'
+  endif
   let output = s:last_output
   let height = len(output)
   if height < 5 | let height = 5 | endif
